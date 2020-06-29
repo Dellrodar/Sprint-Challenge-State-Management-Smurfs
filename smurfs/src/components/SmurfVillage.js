@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
-import {getSmurf, removeSmurf} from '../actions';
-import {connect} from 'react-redux';
+import React, { useEffect } from 'react';
+import { getSmurf, removeSmurf } from '../actions';
+import { connect } from 'react-redux';
+import Smurf from './Smurf';
 
 function SmurfVillage(props) {
 
@@ -8,7 +9,7 @@ function SmurfVillage(props) {
     props.getSmurf()
   }, [props.getSmurf])
 
-  if(props.isFetching){
+  if (props.isFetching) {
     return <h2 className="loading">Smurfs are on the way!</h2>
   }
 
@@ -18,28 +19,24 @@ function SmurfVillage(props) {
   };
 
   return (
-    <div>
-        <button
-        onClick={() => props.getSmurf()}>Get Smurfs</button>
-
-        {props.smurfs.map(smurf => (
-            <div key={smurf.id}>
-                <h3>{smurf.name}</h3>
-                <p>{smurf.age}</p>
-                <p>{smurf.height}</p>
-                <button onClick={handleDelete}>Delete</button>
-            </div>
-        ))}
-    </div>
+    <>
+      {props.smurfs.map((smurf) => (
+        <Smurf id={smurf.id} {...smurf} handleDelete={handleDelete} />
+      ))}
+      <button
+        onClick={() => props.getSmurf()}>
+        Get Smurfs
+      </button>
+    </>
   )
 };
 
 const mapStateToProps = state => {
-  return{
-      smurfs: state.smurfs,
-      isFetching: state.isFetching,
-      error: state.error
+  return {
+    smurfs: state.smurfs,
+    isFetching: state.isFetching,
+    error: state.error
   };
 };
 
-export default connect(mapStateToProps, {getSmurf, removeSmurf})(SmurfVillage);
+export default connect(mapStateToProps, { getSmurf, removeSmurf })(SmurfVillage);
